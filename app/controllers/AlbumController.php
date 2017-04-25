@@ -7,7 +7,7 @@ class AlbumController extends Controller
 {
 
     /**
-     *
+     * This action displays a list of all albums
      * @param string $client
      * @param string $page
      */
@@ -123,6 +123,9 @@ class AlbumController extends Controller
         $this->view->render('albums', array('albums' => $albums, 'client' => $client, 'paginationButtons' => $paginationButtons));
     }
 
+    /**
+     * This action creates а new album
+     */
     public function actionNew()
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -201,6 +204,11 @@ class AlbumController extends Controller
         }
     }
 
+    /**
+     * This action displays one album
+     * @param integer $id
+     * @param string $client
+     */
     public function actionOne($id = null, $client = 'user')
     {
 
@@ -264,6 +272,9 @@ class AlbumController extends Controller
         }
     }
 
+    /**
+     * This action will delete an album
+     */
     public function actionDelete()
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -306,6 +317,9 @@ class AlbumController extends Controller
 
     }
 
+    /**
+     * This action will update the album position
+     */
     public function actionUpdatePosition()
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
@@ -341,6 +355,10 @@ class AlbumController extends Controller
         }
     }
 
+    /**
+     * This action will edit the album
+     * @param integer $id
+     */
     public function actionEdit($id = null)
     {
         // Получение альбома из БД

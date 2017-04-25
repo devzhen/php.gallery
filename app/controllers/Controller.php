@@ -9,6 +9,9 @@ class Controller
     protected $album_manager = null;
     protected $image_manager = null;
 
+    /**
+     * Constructor of base class for all controllers
+     */
     public function __construct()
     {
         $this->view = new \app\components\View();

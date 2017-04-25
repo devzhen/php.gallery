@@ -7,93 +7,62 @@ use app\components\AuthenticationManager;
 class ImageController extends Controller
 {
 
+
     public function actionAdd($album_id = null)
     {
 
         if ($_SERVER['REQUEST_METHOD'] == "POST" && AuthenticationManager::isAuthenticated('admin')) {
 
-            // Если не выбран файл
-            if (\count($_FILES["fileToUpload"]['name']) == 0) {
+            try {
 
+                $album = $this->album_manager->findOne(\intval($album_id));
+
+                /*Путь к директории, куда будут загружены изображения*/
+                $path_to_upload_dir = BASE_DIR . "/app/web/upload-images/" . \intval($album->id) . "_" .
+                    mb_strtolower($album->name, 'UTF-8') . "/";
+
+                /*Создание менеджера загрузки изображений*/
+                $imageUploadManager = new \app\components\ImageUploadManager();
+
+                /*Загрузить изображения*/
+                $result = $imageUploadManager->uploadToFileSystem($path_to_upload_dir);
+
+                /*Результат загрузки*/
                 $_SESSION['fileToUpload'] = [
-                    "message" => "File not selected."
+                    "message" => $result
                 ];
 
-            } else {
+                /*Получение загруженных изображений*/
+                $uploaded_images = $imageUploadManager->getUploadedImages();
 
-                try {
+                /*Сохранить в БД*/
+                foreach ($uploaded_images as $img) {
 
-                    $album = $this->album_manager->findOne(\intval($album_id));
-
-                } catch (\mysqli_sql_exception $e) {
-
-                    $this->action500($e->getMessage());
-                    return;
+                    $image = new \app\models\entities\Image();
+                    $image->name = $img['name'];
+                    $image->dir = $img['dir'];
+                    $image->src = BASE_URL .
+                        "/app/web/upload-images/" .
+                        \intval($album->id) . "_" .
+                        mb_strtolower($album->name, 'UTF-8') . "/" .
+                        $img['uniqueId'] . "_" .
+                        $img['name'];
+                    $image->albumId = \intval($album_id);
+                    $this->image_manager->save($image);
                 }
 
-                for ($i = 0; $i < \count($_FILES["fileToUpload"]['name']); $i++) {
+                header('Location: ' . BASE_URL . '/admin/albums/' . $album_id);
 
-                    /*Проверка размера изображения*/
-                    $check = getimagesize($_FILES["fileToUpload"]["tmp_name"][$i]);
+            } catch (\app\components\exceptions\ImageUploadException $e) {
 
-                    /*Если не изображение*/
-                    if ($check === false) {
-                        continue;
-                    }
+                $_SESSION['fileToUpload'] = [
+                    "message" => $e->getMessage()
+                ];
 
-                    /*Место расположения изображения*/
-                    $uniqueId = uniqid();
+            } catch (\mysqli_sql_exception $e) {
 
-                    $imageDir = BASE_DIR . "/app/web/upload-images/" . $album->id . "_" .
-                        mb_strtolower($album->name, 'UTF-8') . "/" . $uniqueId . "_" . $_FILES["fileToUpload"]["name"][$i];
-
-                    /*Путь, который будет указываться в атрибуте src. <img src ="$imageSrc" />*/
-                    $imageSrc = BASE_URL . "/app/web/upload-images/" . $album->id . "_" .
-                        mb_strtolower($album->name, 'UTF-8') . "/" . $uniqueId . "_" . $_FILES["fileToUpload"]["name"][$i];
-
-                    /*Загрузка изображения*/
-                    if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"][$i], $imageDir)) {
-
-                        /* Загружено одно или несколько изображений*/
-                        if (\count($_FILES["fileToUpload"]["tmp_name"]) > 1) {
-                            $_SESSION['fileToUpload'] = [
-                                "message" => "Uploaded " . \count($_FILES["fileToUpload"]["tmp_name"]) . " image (s)."
-                            ];
-                        } else {
-                            $_SESSION['fileToUpload'] = [
-                                "message" => "The file '" . basename($_FILES["fileToUpload"]["name"][$i]) . "' has been uploaded."
-                            ];
-                        }
-
-                        // Сохранить в БД
-                        $image = new \app\models\entities\Image();
-                        $image->name = $_FILES["fileToUpload"]["name"][$i];
-                        $image->src = $imageSrc;
-                        $image->dir = $imageDir;
-                        $image->albumId = \intval($album_id);
-
-                        try {
-
-                            $this->image_manager->save($image);
-
-                        } catch (\mysqli_sql_exception $e) {
-
-                            $_SESSION['fileToUpload'] = [
-                                "message" => "Sorry, there was an error in mysql database uploading your file."
-                            ];
-                        }
-
-                    } else {
-
-                        $_SESSION['fileToUpload'] = [
-                            "message" => "Sorry, there was an error uploading your file."
-                        ];
-                    }
-                }
-
+                $this->action500($e->getMessage());
             }
-
-            header('Location: ' . BASE_URL . '/admin/albums/' . $album_id);
 
         } else {
 
