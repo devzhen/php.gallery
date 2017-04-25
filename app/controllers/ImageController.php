@@ -21,7 +21,15 @@ class ImageController extends Controller
 
             } else {
 
-                $album = $this->album_manager->findOne(\intval($album_id));
+                try {
+
+                    $album = $this->album_manager->findOne(\intval($album_id));
+
+                } catch (\mysqli_sql_exception $e) {
+
+                    $this->action500($e->getMessage());
+                    return;
+                }
 
                 for ($i = 0; $i < \count($_FILES["fileToUpload"]['name']); $i++) {
 
@@ -64,7 +72,16 @@ class ImageController extends Controller
                         $image->dir = $imageDir;
                         $image->albumId = \intval($album_id);
 
-                        $this->image_manager->save($image);
+                        try {
+
+                            $this->image_manager->save($image);
+
+                        } catch (\mysqli_sql_exception $e) {
+
+                            $_SESSION['fileToUpload'] = [
+                                "message" => "Sorry, there was an error in mysql database uploading your file."
+                            ];
+                        }
 
                     } else {
 
@@ -88,17 +105,25 @@ class ImageController extends Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST" && AuthenticationManager::isAuthenticated('admin')) {
 
-            $image = $this->image_manager->findOne($_POST['imageId']);
+            try {
+                $image = $this->image_manager->findOne($_POST['imageId']);
 
-            // Удаление изображения из БД
-            $this->image_manager->delete($image->id);
+                // Удаление изображения из БД
+                $this->image_manager->delete($image->id);
 
-            // Удаление изображения из каталога
-            \unlink($image->dir);
+                // Удаление изображения из каталога
+                \unlink($image->dir);
 
-            $_SESSION['fileToUpload'] = [
-                "message" => "Image '$image->name' was deleted"
-            ];
+                $_SESSION['fileToUpload'] = [
+                    "message" => "Image '$image->name' was deleted"
+                ];
+
+            } catch (\mysqli_sql_exception $e) {
+
+                echo "Error: " . $e->getMessage();
+            }
+
+
         } else {
             $this->action404();
         }
@@ -113,17 +138,25 @@ class ImageController extends Controller
 
             foreach ($images as $i) {
 
-                $image = $this->image_manager->findOneBySrc($i->src);
-                if (!is_null($image)) {
+                try {
+                    $image = $this->image_manager->findOneBySrc($i->src);
 
-                    $this->image_manager->update(
-                        $image,
-                        null,
-                        null,
-                        null,
-                        null,
-                        $i->position
-                    );
+                    if (!is_null($image)) {
+
+                        $this->image_manager->update(
+                            $image,
+                            null,
+                            null,
+                            null,
+                            null,
+                            $i->position
+                        );
+                    }
+
+                } catch (\mysqli_sql_exception $e) {
+
+                    echo "MySQl Error: " . $e->getMessage();
+                    return;
                 }
             }
 

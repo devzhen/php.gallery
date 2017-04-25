@@ -13,7 +13,7 @@ require_once "entities/Image.php";
 require_once "managers/AlbumMySQLManager.php";
 require_once "managers/ImageMySQLManager.php";
 
-$album_manager = new \app\models\managers\AlbumMySQLManager();
+$album_manager = new \app\models\managers\AlbumMySQLManager(BASE_DIR . "/app/config/db.php");
 
 /*Заполнить таблицу альбомы*/
 for ($i = 1; $i <= 13; $i++) {

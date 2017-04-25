@@ -12,13 +12,22 @@ class Controller
     public function __construct()
     {
         $this->view = new \app\components\View();
-        $this->album_manager = new \app\models\managers\AlbumMySQLManager();
-        $this->image_manager = new \app\models\managers\ImageMySQLManager();
         $this->view->layout = 'layouts/album_layout';
+
+        $config = include(BASE_DIR . '/app/config/db.php');
+
+        $this->album_manager = new \app\models\managers\AlbumMySQLManager($config);
+        $this->image_manager = new \app\models\managers\ImageMySQLManager($config);
+
     }
 
     public function action404()
     {
         $this->view->render('404');
+    }
+
+    public function action500($error_message = null)
+    {
+        $this->view->render('500', array('error_message' => $error_message));
     }
 }

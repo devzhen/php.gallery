@@ -7,60 +7,73 @@ class AlbumMySQLManager
 {
     private $config = null;
 
-    public function __construct()
+    public function __construct($config)
     {
-        $this->config = include(BASE_DIR . '/app/config/db.php');
-
-        $driver = new \mysqli_driver();
-        $driver->report_mode = MYSQLI_REPORT_STRICT;
+        $this->config = $config;
     }
 
     public function save(\app\models\entities\Album $album)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "INSERT INTO " . $this->config['db'] . ".album (name, date, description) VALUES (?,?,?)";
+            $driver = new \mysqli_driver();
 
-        $stmt = $mysqli->prepare($sql);
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        $stmt->bind_param('sss', $album->name, $album->date, $album->description);
+            $sql = "INSERT INTO " . $this->config['db'] . ".album (name, date, description) VALUES (?,?,?)";
 
-        $stmt->execute();
+            $stmt = $mysqli->prepare($sql);
 
-        $album->id = $mysqli->insert_id;
+            $stmt->bind_param('sss', $album->name, $album->date, $album->description);
 
-        $stmt->close();
+            $stmt->execute();
 
-        $mysqli->close();
+            $album->id = $mysqli->insert_id;
 
-        return $album;
+            $stmt->close();
+
+            $mysqli->close();
+
+            return $album;
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
+        }
     }
 
     public function delete($id)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "DELETE FROM " . $this->config['db'] . ".album WHERE id=?";
+            $driver = new \mysqli_driver();
 
-        $stmt = $mysqli->prepare($sql);
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        $stmt->bind_param('i', $id);
+            $sql = "DELETE FROM " . $this->config['db'] . ".album WHERE id=?";
 
-        $stmt->execute();
+            $stmt = $mysqli->prepare($sql);
 
-        $stmt->close();
+            $stmt->bind_param('i', $id);
 
-        $mysqli->close();
+            $stmt->execute();
+
+            $stmt->close();
+
+            $mysqli->close();
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
+        }
     }
 
     /**
@@ -74,59 +87,67 @@ class AlbumMySQLManager
      */
     public function update(\app\models\entities\Album $album, $name = null, $date = null, $description = null, $dir = null, $order_param = null)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "UPDATE " . $this->config['db'] . ".album SET";
+            $driver = new \mysqli_driver();
 
-        /*Необходима ли запятая в sql запросе?*/
-        $is_comma_necessary = false;
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        /*Необходимы ли кавычки в sql запросе?*/
-        $quotes = false;
+            $sql = "UPDATE " . $this->config['db'] . ".album SET";
 
-        /*Анализ параметров*/
-        $rm = new \ReflectionMethod($this, 'update');
-        $params = $rm->getParameters();
+            /*Необходима ли запятая в sql запросе?*/
+            $is_comma_necessary = false;
 
-        for ($i = 1; $i < func_num_args(); $i++) {
+            /*Необходимы ли кавычки в sql запросе?*/
+            $quotes = false;
 
-            /*Если параметр !=null*/
-            if (!is_null(func_get_arg($i))) {
+            /*Анализ параметров*/
+            $rm = new \ReflectionMethod($this, 'update');
+            $params = $rm->getParameters();
 
-                /*Нужно ли добавлять ',' в sql запрос*/
-                if ($is_comma_necessary) {
-                    $sql .= ",";
+            for ($i = 1; $i < func_num_args(); $i++) {
+
+                /*Если параметр !=null*/
+                if (!is_null(func_get_arg($i))) {
+
+                    /*Нужно ли добавлять ',' в sql запрос*/
+                    if ($is_comma_necessary) {
+                        $sql .= ",";
+                    }
+
+                    $sql .= " {$params[$i]->name}=";
+
+                    /*Нужно ли добавлять кавычки для строкового параметра*/
+                    if (is_string(func_get_arg($i))) {
+                        $sql .= "'";
+                        $quotes = true;
+                    }
+
+                    $sql .= func_get_arg($i);
+
+                    /*Были ли открыты кавычки*/
+                    if ($quotes) {
+                        $sql .= "'";
+                        $quotes = false;
+                    }
+
+                    $is_comma_necessary = true;
                 }
-
-                $sql .= " {$params[$i]->name}=";
-
-                /*Нужно ли добавлять кавычки для строкового параметра*/
-                if (is_string(func_get_arg($i))) {
-                    $sql .= "'";
-                    $quotes = true;
-                }
-
-                $sql .= func_get_arg($i);
-
-                /*Были ли открыты кавычки*/
-                if ($quotes) {
-                    $sql .= "'";
-                    $quotes = false;
-                }
-
-                $is_comma_necessary = true;
             }
+
+            $sql .= " WHERE id=" . $album->id . ";";
+
+            $mysqli->query($sql);
+            $mysqli->close();
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
         }
-
-        $sql .= " WHERE id=" . $album->id . ";";
-
-        $mysqli->query($sql);
-        $mysqli->close();
     }
 
     /**
@@ -135,37 +156,45 @@ class AlbumMySQLManager
      */
     public function findAll($limit = null, $offset = null)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
-        $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "SELECT * FROM " . $this->config['db'] . ".album ORDER BY order_param ASC, date DESC";
+            $driver = new \mysqli_driver();
 
-        if (!is_null($limit)) {
-            $sql .= " LIMIT $limit";
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
+
+            $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+
+            $sql = "SELECT * FROM " . $this->config['db'] . ".album ORDER BY order_param ASC, date DESC";
+
+            if (!is_null($limit)) {
+                $sql .= " LIMIT $limit";
+            }
+
+            if (!is_null($offset)) {
+                $sql .= " OFFSET $offset";
+            }
+
+            $sql .= ";";
+
+            $res = $mysqli->query($sql);
+
+            $albums = $res->fetch_all(\MYSQLI_ASSOC);
+
+            $res->close();
+
+            $mysqli->close();
+
+            return $albums;
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
         }
-
-        if (!is_null($offset)) {
-            $sql .= " OFFSET $offset";
-        }
-
-        $sql .= ";";
-
-        $res = $mysqli->query($sql);
-
-        $albums = $res->fetch_all(\MYSQLI_ASSOC);
-
-        $res->close();
-
-        $mysqli->close();
-
-        return $albums;
     }
-
 
     /**
      * Returns an album found by id or null
@@ -174,39 +203,47 @@ class AlbumMySQLManager
      */
     public function findOne($id)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
-        $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE id=$id;";
+            $driver = new \mysqli_driver();
 
-        $res = $mysqli->query($sql);
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        // Если данный альбом отсутствует
-        if ($res->num_rows == 0) {
-            return null;
+            $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+
+            $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE id=$id;";
+
+            $res = $mysqli->query($sql);
+
+            // Если данный альбом отсутствует
+            if ($res->num_rows == 0) {
+                return null;
+            }
+
+            $arr = $res->fetch_assoc();
+
+            $res->close();
+
+            $mysqli->close();
+
+            $album = new \app\models\entities\Album();
+            $album->id = \intval($arr['id']);
+            $album->name = $arr['name'];
+            $album->date = \DateTime::createFromFormat('Y-m-d H:i:s', $arr['date']);
+            $album->description = $arr['description'];
+            $album->dir = $arr['dir'];
+
+            return $album;
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
         }
-
-        $arr = $res->fetch_assoc();
-
-        $res->close();
-
-        $mysqli->close();
-
-        $album = new \app\models\entities\Album();
-        $album->id = \intval($arr['id']);
-        $album->name = $arr['name'];
-        $album->date = \DateTime::createFromFormat('Y-m-d H:i:s', $arr['date']);
-        $album->description = $arr['description'];
-        $album->dir = $arr['dir'];
-
-        return $album;
     }
-
 
     /**
      * Returns an album found by name or null
@@ -215,36 +252,45 @@ class AlbumMySQLManager
      */
     public function findByName($name)
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
-        $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE name='" . $name . "';";
+            $driver = new \mysqli_driver();
 
-        $res = $mysqli->query($sql);
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        // Если данный альбом отсутствует
-        if ($res->num_rows == 0) {
-            return null;
+            $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+
+            $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE name='" . $name . "';";
+
+            $res = $mysqli->query($sql);
+
+            // Если данный альбом отсутствует
+            if ($res->num_rows == 0) {
+                return null;
+            }
+
+            $arr = $res->fetch_assoc();
+
+            $res->close();
+
+            $mysqli->close();
+
+            $album = new \app\models\entities\Album();
+            $album->id = $arr['id'];
+            $album->name = $arr['name'];
+            $album->date = \DateTime::createFromFormat('Y-m-d H:i:s', $arr['date']);
+            $album->description = $arr['description'];
+
+            return $album;
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
         }
-
-        $arr = $res->fetch_assoc();
-
-        $res->close();
-
-        $mysqli->close();
-
-        $album = new \app\models\entities\Album();
-        $album->id = $arr['id'];
-        $album->name = $arr['name'];
-        $album->date = \DateTime::createFromFormat('Y-m-d H:i:s', $arr['date']);
-        $album->description = $arr['description'];
-
-        return $album;
     }
 
     /**
@@ -253,24 +299,34 @@ class AlbumMySQLManager
      */
     public function count()
     {
-        $mysqli = new \mysqli(
-            $this->config['host'],
-            $this->config['user'],
-            $this->config['passw'],
-            $this->config['db']
-        );
-        $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+        try {
+            $mysqli = new \mysqli(
+                $this->config['host'],
+                $this->config['user'],
+                $this->config['passw'],
+                $this->config['db']
+            );
 
-        $sql = "SELECT COUNT(id) FROM " . $this->config['db'] . ".album;";
+            $driver = new \mysqli_driver();
 
-        $res = $mysqli->query($sql);
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
 
-        $arr = $res->fetch_array();
+            $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
 
-        $res->close();
+            $sql = "SELECT COUNT(id) FROM " . $this->config['db'] . ".album;";
 
-        $mysqli->close();
+            $res = $mysqli->query($sql);
 
-        return $arr[0];
+            $arr = $res->fetch_array();
+
+            $res->close();
+
+            $mysqli->close();
+
+            return $arr[0];
+
+        } catch (\mysqli_sql_exception $e) {
+            throw $e;
+        }
     }
 }
