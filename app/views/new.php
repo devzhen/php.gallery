@@ -22,7 +22,7 @@
         <div class="col-lg-6">
 
             <!--ФОРМА-->
-            <form name="albumForm" ng-submit="ctrl.submitForm($event, albumForm)" novalidate>
+            <form id="albumForm" name="albumForm" ng-submit="ctrl.submitForm($event, albumForm)" novalidate>
 
                 <div ng-show="albumForm.$submitted || albumForm.aName.$touched">
                     <div ng-show="albumForm.aName.$error.required" class="message">

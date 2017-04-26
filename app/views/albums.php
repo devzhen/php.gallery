@@ -8,14 +8,16 @@
                 <div class="col-lg-6 col-md-6 col-sm-6">
                     <!-- Кнопка + -->
                     <a href="<?php echo BASE_URL . '/admin/albums/new'; ?>">
-                        <button class="add-album btn btn-warning">+</button>
+                        <button class="add-album btn btn-warning" id="add-album">+</button>
                     </a>
 
                     <!-- Кнопка - -->
-                    <button class="del-album btn btn-warning" ng-click="deleteAlbum()">-</button>
+                    <button class="del-album btn btn-warning" ng-click="deleteAlbum()" id="del-album">-</button>
 
                     <!-- Кнопка logout -->
-                    <button class="add-album btn btn-danger" dg-logout>Log out</button>
+                    <button class="add-album btn btn-danger" dg-logout id="logout">
+                        Log out
+                    </button>
                 </div>
             <? endif; ?>
         </div>
@@ -74,7 +76,7 @@
     <? if (!is_null($paginationButtons)): ?>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 pagination-container">
-                <?= $paginationButtons;?>
+                <?= $paginationButtons; ?>
             </div>
         </div>
     <? endif; ?>
