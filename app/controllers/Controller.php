@@ -14,6 +14,7 @@ class Controller
      */
     public function __construct()
     {
+
         $this->view = new \app\components\View();
         $this->view->layout = 'layouts/album_layout';
 
@@ -21,7 +22,6 @@ class Controller
 
         $this->album_manager = new \app\models\managers\AlbumMySQLManager($config);
         $this->image_manager = new \app\models\managers\ImageMySQLManager($config);
-
     }
 
     public function action404()

@@ -3,42 +3,30 @@
 namespace app\models\managers;
 
 
-class ImageMySQLManager
+class ImageMySQLManager extends BaseMySQLManager
 {
-    private $config = null;
-
-    public function __construct($config)
-    {
-        $this->config = $config;
-    }
 
     public function save(\app\models\entities\Image $image)
     {
         try {
-            $mysqli = new \mysqli(
-                $this->config['host'],
-                $this->config['user'],
-                $this->config['passw'],
-                $this->config['db']
-            );
 
-            $driver = new \mysqli_driver();
-
-            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
+            // TODO
+            // Переделать все методы
+            $this->openConnection();
 
             $sql = "INSERT INTO " . $this->config['db'] . ".image (name, src, dir, album_id) VALUES (?,?,?,?)";
 
-            $stmt = $mysqli->prepare($sql);
+            $stmt = $this->mysqli->prepare($sql);
 
             $stmt->bind_param('sssi', $image->name, $image->src, $image->dir, $image->albumId);
 
             $stmt->execute();
 
-            $image->id = $mysqli->insert_id;
+            $image->id = $this->mysqli->insert_id;
 
             $stmt->close();
 
-            $mysqli->close();
+            $this->closeConnection();
 
             return $image;
 
