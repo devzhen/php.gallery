@@ -20,8 +20,8 @@ class Controller
 
         $config = include(BASE_DIR . '/app/config/db.php');
 
-        $this->album_manager = new \app\models\managers\AlbumMySQLManager($config);
-        $this->image_manager = new \app\models\managers\ImageMySQLManager($config);
+        $this->album_manager = new \app\models\managers\mysql\AlbumMySQLManager($config);
+        $this->image_manager = new \app\models\managers\mysql\ImageMySQLManager($config);
     }
 
     public function action404()

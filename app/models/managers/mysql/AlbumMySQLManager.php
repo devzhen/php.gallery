@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models\managers;
+namespace app\models\managers\mysql;
 
 
 class AlbumMySQLManager extends BaseMySQLManager

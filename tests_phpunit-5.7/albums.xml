@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="album">
+        <column>name</column>
+        <column>date</column>
+        <column>description</column>
+        <column>dir</column>
+        <column>order_param</column>
+        <row>
+            <value>Dogs</value>
+            <value>2017-05-01 19:50:21</value>
+            <value>This album contains images of dogs</value>
+            <value></value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>Cats</value>
+            <value>2017-05-02 19:59:28</value>
+            <value>This album contains images of cats</value>
+            <value></value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>Motorcycles</value>
+            <value>2017-05-03 20:00:19</value>
+            <value>This album contains images of motorcycles</value>
+            <value></value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>Nature</value>
+            <value>2017-05-05 20:00:47</value>
+            <value>This album contains images of nature</value>
+            <value></value>
+            <value>-1</value>
+        </row>
+    </table>
+</dataset>
