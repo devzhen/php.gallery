@@ -1,4 +1,4 @@
 .idea/
-tests/_output/*
+tests/_output/
 upload-images/*
 upload-images/
