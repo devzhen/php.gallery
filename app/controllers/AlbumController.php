@@ -110,12 +110,12 @@ class AlbumController extends Controller
             $album = $album + array('token' => md5(uniqid(rand(), true)));
 
             // Установка первого изображения в альбоме
-            $firstImage = $this->image_manager->findFirstByAlbum($album['id']);
+            $firstImage = $this->image_manager->findAllByAlbum(\intval($album['id']), 1);
 
-            if ($firstImage == null) {
+            if (empty($firstImage)) {
                 $album = $album + array('firstImage' => BASE_URL . "/app/web/images/no-image.jpg");
             } else {
-                $album = $album + array('firstImage' => $firstImage['src']);
+                $album = $album + array('firstImage' => $firstImage[0]['src']);
             }
         }
 

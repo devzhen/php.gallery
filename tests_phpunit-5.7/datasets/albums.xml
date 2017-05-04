@@ -1,37 +1,305 @@
 <?xml version="1.0" ?>
 <dataset>
     <table name="album">
+        <column>id</column>
         <column>name</column>
         <column>date</column>
         <column>description</column>
         <column>dir</column>
         <column>order_param</column>
         <row>
+            <value>1</value>
             <value>Dogs</value>
-            <value>2017-05-01 19:50:21</value>
+            <value>2017-05-01 13:34:37</value>
             <value>This album contains images of dogs</value>
-            <value></value>
+            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/1_dogs</value>
             <value>-1</value>
         </row>
         <row>
+            <value>2</value>
             <value>Cats</value>
-            <value>2017-05-02 19:59:28</value>
+            <value>2017-05-02 13:34:54</value>
             <value>This album contains images of cats</value>
-            <value></value>
+            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/2_cats</value>
             <value>-1</value>
         </row>
         <row>
+            <value>3</value>
             <value>Motorcycles</value>
-            <value>2017-05-03 20:00:19</value>
+            <value>2017-05-03 13:35:15</value>
             <value>This album contains images of motorcycles</value>
-            <value></value>
+            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/3_motorcycles</value>
             <value>-1</value>
         </row>
         <row>
+            <value>4</value>
             <value>Nature</value>
-            <value>2017-05-05 20:00:47</value>
+            <value>2017-05-04 13:35:28</value>
             <value>This album contains images of nature</value>
-            <value></value>
+            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/4_nature</value>
+            <value>-1</value>
+        </row>
+    </table>
+    <table name="image">
+        <column>id</column>
+        <column>name</column>
+        <column>album_id</column>
+        <column>src</column>
+        <column>dir</column>
+        <column>order_param</column>
+        <row>
+            <value>1</value>
+            <value>1.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e786594_1.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e786594_1.jpg
+            </value>
+            <value>1</value>
+        </row>
+        <row>
+            <value>2</value>
+            <value>2.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e786d64_2.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e786d64_2.jpg
+            </value>
+            <value>2</value>
+        </row>
+        <row>
+            <value>3</value>
+            <value>3.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e786d64_3.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e786d64_3.jpg
+            </value>
+            <value>3</value>
+        </row>
+        <row>
+            <value>4</value>
+            <value>4.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e78714c_4.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e78714c_4.jpg
+            </value>
+            <value>0</value>
+        </row>
+        <row>
+            <value>5</value>
+            <value>5.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e787534_5.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e787534_5.jpg
+            </value>
+            <value>4</value>
+        </row>
+        <row>
+            <value>6</value>
+            <value>images (1).jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e78791c_images (1).jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e78791c_images
+                (1).jpg
+            </value>
+            <value>5</value>
+        </row>
+        <row>
+            <value>7</value>
+            <value>images (2).jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e787d04_images (2).jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e787d04_images
+                (2).jpg
+            </value>
+            <value>6</value>
+        </row>
+        <row>
+            <value>8</value>
+            <value>images (3).jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e787d04_images (3).jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e787d04_images
+                (3).jpg
+            </value>
+            <value>7</value>
+        </row>
+        <row>
+            <value>9</value>
+            <value>images (4).jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e7880ec_images (4).jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e7880ec_images
+                (4).jpg
+            </value>
+            <value>8</value>
+        </row>
+        <row>
+            <value>10</value>
+            <value>images (5).jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e7880ec_images (5).jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e7880ec_images
+                (5).jpg
+            </value>
+            <value>9</value>
+        </row>
+        <row>
+            <value>11</value>
+            <value>images.jpg</value>
+            <value>4</value>
+            <value>http://php.gallery/app/web/upload-images/4_nature/590b05e7884d4_images.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/4_nature/590b05e7884d4_images.jpg
+            </value>
+            <value>10</value>
+        </row>
+        <row>
+            <value>12</value>
+            <value>1.jpg</value>
+            <value>3</value>
+            <value>http://php.gallery/app/web/upload-images/3_motorcycles/590b2a42c9d0e_1.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/3_motorcycles/590b2a42c9d0e_1.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>13</value>
+            <value>2.jpg</value>
+            <value>3</value>
+            <value>http://php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca0f6_2.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca0f6_2.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>14</value>
+            <value>3.jpg</value>
+            <value>3</value>
+            <value>http://php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca0f6_3.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca0f6_3.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>15</value>
+            <value>4.jpg</value>
+            <value>3</value>
+            <value>http://php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca4de_4.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/3_motorcycles/590b2a42ca4de_4.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>16</value>
+            <value>5.jpg</value>
+            <value>3</value>
+            <value>http://php.gallery/app/web/upload-images/3_motorcycles/590b2a42cacae_5.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/3_motorcycles/590b2a42cacae_5.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>22</value>
+            <value>1.jpg</value>
+            <value>2</value>
+            <value>http://php.gallery/app/web/upload-images/2_cats/590b2a7b9d718_1.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/2_cats/590b2a7b9d718_1.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>23</value>
+            <value>2.jpg</value>
+            <value>2</value>
+            <value>http://php.gallery/app/web/upload-images/2_cats/590b2a7b9db00_2.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/2_cats/590b2a7b9db00_2.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>24</value>
+            <value>3.jpg</value>
+            <value>2</value>
+            <value>http://php.gallery/app/web/upload-images/2_cats/590b2a7b9db00_3.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/2_cats/590b2a7b9db00_3.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>25</value>
+            <value>4.jpg</value>
+            <value>2</value>
+            <value>http://php.gallery/app/web/upload-images/2_cats/590b2a7b9dee8_4.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/2_cats/590b2a7b9dee8_4.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>26</value>
+            <value>1.jpg</value>
+            <value>1</value>
+            <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca2135_1.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca2135_1.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>27</value>
+            <value>2.jpg</value>
+            <value>1</value>
+            <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca251d_2.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca251d_2.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>28</value>
+            <value>3.jpg</value>
+            <value>1</value>
+            <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca251d_3.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca251d_3.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>29</value>
+            <value>4.jpg</value>
+            <value>1</value>
+            <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca34bd_4.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca34bd_4.jpg
+            </value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>30</value>
+            <value>5.jpg</value>
+            <value>1</value>
+            <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca38a5_5.jpg</value>
+            <value>
+                D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca38a5_5.jpg
+            </value>
             <value>-1</value>
         </row>
     </table>

@@ -14,3 +14,7 @@ $I->see('Log out', 'button');
 $I->wantTo('Add album');
 $I->click('+', 'button');
 $I->see('Create new album');
+$I->fillField('aName', 'TEST');
+$I->fillField('aDescription', 'TEST DESCRIPTION');
+$I->wantTo('Click button "Create"');
+$I->click('Create','button');

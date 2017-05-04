@@ -204,49 +204,21 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
     {
         $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
 
-        $actual_albums = $album_manager->findAll();
+        /*Поиск альбомов*/
+        $founded_albums = $album_manager->findAll();
 
-        $expected_albums = array(
-            0 =>
-                array(
-                    'id' => 4,
-                    'name' => 'Nature',
-                    'date' => '2017-05-05 20:00:47',
-                    'description' => 'This album contains images of nature',
-                    'dir' => '',
-                    'order_param' => -1,
-                ),
-            1 =>
-                array(
-                    'id' => 3,
-                    'name' => 'Motorcycles',
-                    'date' => '2017-05-03 20:00:19',
-                    'description' => 'This album contains images of motorcycles',
-                    'dir' => '',
-                    'order_param' => -1,
-                ),
-            2 =>
-                array(
-                    'id' => 2,
-                    'name' => 'Cats',
-                    'date' => '2017-05-02 19:59:28',
-                    'description' => 'This album contains images of cats',
-                    'dir' => '',
-                    'order_param' => -1,
-                ),
-            3 =>
-                array(
-                    'id' => 1,
-                    'name' => 'Dogs',
-                    'date' => '2017-05-01 19:50:21',
-                    'description' => 'This album contains images of dogs',
-                    'dir' => '',
-                    'order_param' => -1,
-                )
-        );
+        /*Текущее состояние таблицы альбомов в БД*/
+        $albums_table = $this->getConnection()->createDataSet(['album'])->getTable('album');
+        $actual_albums = array();
 
+        /*Создание массива актуальных из БД альбомов*/
+        for ($i = $albums_table->getRowCount() - 1; $i >= 0; $i--) {
+            $actual_albums[] = $albums_table->getRow($i);
+        }
+
+        /*Проверка*/
         $this->assertEquals(
-            $expected_albums,
+            $founded_albums,
             $actual_albums,
             "Assertion that arrays of albums are equal");
     }
