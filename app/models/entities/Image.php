@@ -21,7 +21,7 @@ class Image
      * @param integer $albumId
      * @param integer $order_param
      */
-    public function __construct($id = null, $name, $src = "NULL", $dir = "NULL", $albumId = 1, $order_param = -1)
+    public function __construct($id = null, $name = null, $src = "NULL", $dir = "NULL", $albumId = 1, $order_param = -1)
     {
         $this->id = $id;
         $this->name = $name;

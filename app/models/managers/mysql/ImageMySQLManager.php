@@ -77,7 +77,7 @@ class ImageMySQLManager extends BaseMySQLManager
         try {
             $mysqli = $this->openConnection();
 
-            $sql = "SELECT * FROM " . $this->config['db'] . ".image ORDER BY order_param ASC;";
+            $sql = "SELECT * FROM " . $this->config['db'] . ".image;";
 
             $res = $mysqli->query($sql);
 
@@ -125,7 +125,6 @@ class ImageMySQLManager extends BaseMySQLManager
             $image->name = $arr['name'];
             $image->src = $arr['src'];
             $image->dir = $arr['dir'];
-            $image->description = $arr['description'];
             $image->albumId = $arr['album_id'];
             $image->order_param = $arr['order_param'];
 

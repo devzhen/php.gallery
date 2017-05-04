@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<dataset>
+    <table name="image">
+        <column>name</column>
+        <column>album_id</column>
+        <column>src</column>
+        <column>dir</column>
+        <column>order_param</column>
+        <row>
+            <value>TEST</value>
+            <value>1</value>
+            <value>TEST</value>
+            <value>TEST</value>
+            <value>-1</value>
+        </row>
+    </table>
+</dataset>
