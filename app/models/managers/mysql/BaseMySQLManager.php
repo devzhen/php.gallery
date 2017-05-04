@@ -11,11 +11,6 @@ abstract class BaseMySQLManager
     protected $config = null;
 
     /**
-     * @var \mysqli MySQL connection
-     */
-    protected $mysqli = null;
-
-    /**
      * Constructor of base class for all mysql managers classes
      * @param array $config Database configuration file
      */
@@ -30,36 +25,27 @@ abstract class BaseMySQLManager
      */
     protected function openConnection()
     {
-        /*Указание драйверу mysql использовать exceptions вместо errors*/
-        $driver = new \mysqli_driver();
-        $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
-
         /*Подключение к БД*/
         try {
 
-            $this->mysqli = new \mysqli(
+            $mysqli = new \mysqli(
                 $this->config['host'],
                 $this->config['user'],
                 $this->config['passw'],
                 $this->config['db']
             );
 
+            /*Указание драйверу mysql использовать exceptions вместо errors*/
+            $driver = new \mysqli_driver();
+            $driver->report_mode = MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT;
+
             /*Указание преобразовывать результаты из БД в PHP типы*/
-            $this->mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+            $mysqli->options(\MYSQLI_OPT_INT_AND_FLOAT_NATIVE, true);
+
+            return $mysqli;
 
         } catch (\mysqli_sql_exception $e) {
             throw $e;
-        }
-    }
-
-
-    /**
-     * Closes mysqli connection
-     */
-    protected function closeConnection()
-    {
-        if (!is_null($this->mysqli->host_info)) {
-            $this->mysqli->close();
         }
     }
 }

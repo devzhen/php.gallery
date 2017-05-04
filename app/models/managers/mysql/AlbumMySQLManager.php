@@ -16,11 +16,11 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "INSERT INTO " . $this->config['db'] . ".album (name, date, description) VALUES (?,?,?)";
 
-            $stmt = $this->mysqli->prepare($sql);
+            $stmt = $mysqli->prepare($sql);
 
             $stmt->bind_param('sss', $album->name, $album->date, $album->description);
 
@@ -28,9 +28,9 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $stmt->close();
 
-            $this->closeConnection();
+            $album = $this->findOne($mysqli->insert_id);
 
-            $album = $this->findOne($this->mysqli->insert_id);
+            $mysqli->close();
 
             return $album;
 
@@ -49,11 +49,11 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "DELETE FROM " . $this->config['db'] . ".album WHERE id=?";
 
-            $stmt = $this->mysqli->prepare($sql);
+            $stmt = $mysqli->prepare($sql);
 
             $stmt->bind_param('i', $id);
 
@@ -61,7 +61,7 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $stmt->close();
 
-            $this->closeConnection();
+            $mysqli->close();
 
         } catch (\mysqli_sql_exception $e) {
             throw $e;
@@ -82,7 +82,7 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "UPDATE " . $this->config['db'] . ".album SET";
 
@@ -128,9 +128,9 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $sql .= " WHERE id=" . $album->id . ";";
 
-            $this->mysqli->query($sql);
+            $mysqli->query($sql);
 
-            $this->closeConnection();
+            $mysqli->close();
 
         } catch (\mysqli_sql_exception $e) {
             throw $e;
@@ -148,7 +148,7 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "SELECT * FROM " . $this->config['db'] . ".album ORDER BY order_param ASC, date DESC";
 
@@ -162,13 +162,13 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $sql .= ";";
 
-            $res = $this->mysqli->query($sql);
+            $res = $mysqli->query($sql);
 
             $albums = $res->fetch_all(\MYSQLI_ASSOC);
 
             $res->close();
 
-            $this->closeConnection();
+            $mysqli->close();
 
             return $albums;
 
@@ -187,11 +187,11 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE id=$id;";
 
-            $res = $this->mysqli->query($sql);
+            $res = $mysqli->query($sql);
 
             // Если данный альбом отсутствует
             if ($res->num_rows == 0) {
@@ -202,7 +202,7 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $res->close();
 
-            $this->closeConnection();
+            $mysqli->close();
 
             $album = new \app\models\entities\Album(
                 \intval($arr['id']),
@@ -230,11 +230,11 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "SELECT * FROM " . $this->config['db'] . ".album WHERE name='" . $name . "';";
 
-            $res = $this->mysqli->query($sql);
+            $res = $mysqli->query($sql);
 
             // Если данный альбом отсутствует
             if ($res->num_rows == 0) {
@@ -245,7 +245,7 @@ class AlbumMySQLManager extends BaseMySQLManager
 
             $res->close();
 
-            $this->closeConnection();
+            $mysqli->close();
 
             $album = new \app\models\entities\Album(
                 \intval($arr['id']),
@@ -273,17 +273,17 @@ class AlbumMySQLManager extends BaseMySQLManager
     {
         try {
 
-            $this->openConnection();
+            $mysqli = $this->openConnection();
 
             $sql = "SELECT COUNT(id) FROM " . $this->config['db'] . ".album;";
 
-            $res = $this->mysqli->query($sql);
+            $res = $mysqli->query($sql);
 
             $arr = $res->fetch_array();
 
             $res->close();
 
-            $this->closeConnection();
+            $mysqli->close();
 
             return $arr[0];
 
