@@ -4,9 +4,9 @@ namespace tests\models\managers\mysql;
 
 define("BASE_DIR", dirname(dirname(dirname(dirname(__FILE__)))));
 
-require dirname(BASE_DIR) . "/app/models/entities/Album.php";
-require dirname(BASE_DIR) . "/app/models/managers/mysql/BaseMySQLManager.php";
-require dirname(BASE_DIR) . "/app/models/managers/mysql/AlbumMySQLManager.php";
+require_once dirname(BASE_DIR) . "/app/models/entities/Album.php";
+require_once dirname(BASE_DIR) . "/app/models/managers/mysql/BaseMySQLManager.php";
+require_once dirname(BASE_DIR) . "/app/models/managers/mysql/AlbumMySQLManager.php";
 
 use PHPUnit_Extensions_Database_DataSet_IDataSet;
 use PHPUnit_Extensions_Database_DB_IDatabaseConnection;
@@ -54,7 +54,7 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
      */
     protected function getDataSet()
     {
-        return $this->createXMLDataSet(BASE_DIR . "/datasets/albums.xml");
+        return $this->createXMLDataSet(BASE_DIR . "/datasets/gallery.xml");
     }
 
 
