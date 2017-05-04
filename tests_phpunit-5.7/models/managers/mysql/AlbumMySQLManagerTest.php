@@ -278,4 +278,37 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
             $founded_album,
             "Assertion that albums are equal");
     }
+
+
+    /**
+     * Тест поиска альбома по имени
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::findByName()
+     */
+    public function testFindAlbumByName()
+    {
+        $name = md5(md5(uniqid("", true)));
+
+        $album_manger = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
+
+        /*Создание альбома*/
+        $created_album = new \app\models\entities\Album(
+            null,
+            $name,
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+        $created_album = $album_manger->save($created_album);
+
+
+        /*Поиск альбома по имени*/
+        $founded_album = $album_manger->findByName($name);
+
+        /*Проверка*/
+        $this->assertEquals($founded_album->id, $created_album->id);
+        $this->assertEquals($founded_album->name, $created_album->name);
+        $this->assertEquals($founded_album->date, $created_album->date);
+        $this->assertEquals($founded_album->description, $created_album->description);
+
+    }
 }
