@@ -311,4 +311,39 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
         $this->assertEquals($founded_album->description, $created_album->description);
 
     }
+
+
+    /**
+     * Тест количества альбомов
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::count()
+     */
+    public function testCount()
+    {
+        $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
+
+        $this->assertEquals(
+            $album_manager->count(),
+            $this->getConnection()->getRowCount('album'));
+
+        /*Создание альбома*/
+        $album = new \app\models\entities\Album(
+            null,
+            "Test",
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+
+        $album = $album_manager->save($album);
+
+        $this->assertEquals(
+            $album_manager->count(),
+            $this->getConnection()->getRowCount('album'));
+
+        $album_manager->delete($album->id);
+
+        $this->assertEquals(
+            $album_manager->count(),
+            $this->getConnection()->getRowCount('album'));
+    }
 }
