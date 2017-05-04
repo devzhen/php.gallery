@@ -152,4 +152,49 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
             "Asseerting that the tables are equal"
         );
     }
+
+
+    /**
+     * Тест обновления альбома
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::update()
+     */
+    public function testUpdateAlbum()
+    {
+        /*Создание альбома*/
+        $album = new \app\models\entities\Album(
+            null,
+            "Test",
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+        $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
+        $album = $album_manager->save($album);
+
+        /*Обновление альбома*/
+        $album_manager->update(
+            $album,
+            "TEST",
+            "2000-01-01 00:00:00",
+            "TEST DESCRIPTION",
+            "",
+            -1
+        );
+
+
+        /*Текущее состояние*/
+        $query_table = $this->getConnection()->createQueryTable(
+            'album',
+            "SELECT name, date, description, dir, order_param FROM gallery.album WHERE id=$album->id;"
+        );
+
+        /*Ожидаемый результат*/
+        $expected_table = $this->createXMLDataSet(BASE_DIR . "/datasets/test-update-album.xml")->getTable('album');
+
+
+        /*Проверка соответствия таблиц*/
+        $this->assertTablesEqual($expected_table, $query_table);
+    }
+
+
 }
