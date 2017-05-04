@@ -78,7 +78,6 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
         $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
         $album_manager->save($album);
 
-
         /*Проверка, что количество строк в таблице 'album' увеличилось*/
         $this->assertEquals(
             $row_count + 1,
@@ -197,4 +196,58 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
     }
 
 
+    /**
+     * Тест поиска всех альбомов
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::findAll()
+     */
+    public function testFindAllAlbums()
+    {
+        $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
+
+        $actual_albums = $album_manager->findAll();
+
+        $expected_albums = array(
+            0 =>
+                array(
+                    'id' => 4,
+                    'name' => 'Nature',
+                    'date' => '2017-05-05 20:00:47',
+                    'description' => 'This album contains images of nature',
+                    'dir' => '',
+                    'order_param' => -1,
+                ),
+            1 =>
+                array(
+                    'id' => 3,
+                    'name' => 'Motorcycles',
+                    'date' => '2017-05-03 20:00:19',
+                    'description' => 'This album contains images of motorcycles',
+                    'dir' => '',
+                    'order_param' => -1,
+                ),
+            2 =>
+                array(
+                    'id' => 2,
+                    'name' => 'Cats',
+                    'date' => '2017-05-02 19:59:28',
+                    'description' => 'This album contains images of cats',
+                    'dir' => '',
+                    'order_param' => -1,
+                ),
+            3 =>
+                array(
+                    'id' => 1,
+                    'name' => 'Dogs',
+                    'date' => '2017-05-01 19:50:21',
+                    'description' => 'This album contains images of dogs',
+                    'dir' => '',
+                    'order_param' => -1,
+                )
+        );
+
+        $this->assertEquals(
+            $expected_albums,
+            $actual_albums,
+            "Assertion that arrays of albums are equal");
+    }
 }
