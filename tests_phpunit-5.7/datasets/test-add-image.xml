@@ -1,45 +1,5 @@
 <?xml version="1.0" ?>
 <dataset>
-    <table name="album">
-        <column>id</column>
-        <column>name</column>
-        <column>date</column>
-        <column>description</column>
-        <column>dir</column>
-        <column>order_param</column>
-        <row>
-            <value>1</value>
-            <value>Dogs</value>
-            <value>2017-05-01 13:34:37</value>
-            <value>This album contains images of dogs</value>
-            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/1_dogs</value>
-            <value>-1</value>
-        </row>
-        <row>
-            <value>2</value>
-            <value>Cats</value>
-            <value>2017-05-02 13:34:54</value>
-            <value>This album contains images of cats</value>
-            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/2_cats</value>
-            <value>-1</value>
-        </row>
-        <row>
-            <value>3</value>
-            <value>Motorcycles</value>
-            <value>2017-05-03 13:35:15</value>
-            <value>This album contains images of motorcycles</value>
-            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/3_motorcycles</value>
-            <value>-1</value>
-        </row>
-        <row>
-            <value>4</value>
-            <value>Nature</value>
-            <value>2017-05-04 13:35:28</value>
-            <value>This album contains images of nature</value>
-            <value>D:/OpenServer/domains/localhost/projects/php.gallery/app/web/upload-images/4_nature</value>
-            <value>-1</value>
-        </row>
-    </table>
     <table name="image">
         <column>id</column>
         <column>name</column>
@@ -245,6 +205,14 @@
             <value>1</value>
             <value>http://php.gallery/app/web/upload-images/1_dogs/590b2a8ca38a5_5.jpg</value>
             <value>D:\OpenServer\domains\localhost\projects\php.gallery/app/web/upload-images/1_dogs/590b2a8ca38a5_5.jpg</value>
+            <value>-1</value>
+        </row>
+        <row>
+            <value>31</value>
+            <value>TEST_IMAGE</value>
+            <value>1</value>
+            <value>NULL</value>
+            <value>NULL</value>
             <value>-1</value>
         </row>
     </table>

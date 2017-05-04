@@ -56,4 +56,33 @@ class ImageMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
     {
         return $this->createXMLDataSet(BASE_DIR . "/datasets/gallery.xml");
     }
+
+
+    /**
+     * Тест сохранения изображения
+     * @covers \app\models\managers\mysql\ImageMySQLManager::save()
+     */
+    public function testSaveImage()
+    {
+        /*Создание изображения*/
+        $image_manager = new \app\models\managers\mysql\ImageMySQLManager(self::$config);
+
+        $image = new \app\models\entities\Image(
+            null,
+            "TEST_IMAGE"
+        );
+        $image_manager->save($image);
+
+        /*Таблицы изображений в БД*/
+        $actual_images = $this->getConnection()->createQueryTable(
+            'image',
+            "SELECT * FROM gallery.image;"
+        );
+
+        /*Ожидаемая таблица изображений*/
+        $expected_images = $this->createXMLDataSet(BASE_DIR . "/datasets/test-add-image.xml")->getTable('image');
+
+
+        $this->assertTablesEqual($expected_images, $actual_images);
+    }
 }
