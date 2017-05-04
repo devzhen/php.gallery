@@ -60,6 +60,7 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
 
     /**
      * Тест добавления альбома
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::save()
      */
     public function testAddAlbum()
     {
@@ -103,4 +104,52 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
     }
 
 
+    /**
+     * Тест удаления альбома
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::delete()
+     */
+    public function testDeleteAlbum()
+    {
+        /*Количество строк в таблице 'album' перед тестом*/
+        $row_count = $this->getConnection()->getRowCount('album');
+
+        /*Создание альбома*/
+        $album = new \app\models\entities\Album(
+            null,
+            "Test",
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+        $album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$config);
+        $album = $album_manager->save($album);
+
+
+        /*Удаление альбома*/
+        $album_manager->delete($album->id);
+
+
+        /*Проверка, что количество строк в таблице 'album' не изменилось*/
+        $this->assertEquals(
+            $row_count,
+            $this->getConnection()->getRowCount('album'),
+            "Asserting that the number of rows has not changed"
+        );
+
+
+        /*Текущее состояние таблицы в БД*/
+        $query_table = $this->getConnection()->createQueryTable(
+            "album",
+            "SELECT name, date, description, dir, order_param FROM gallery.album;");
+
+        /*Ожидаемое состояние таблицы в БД*/
+        $expected_table = $this->createXMLDataSet(BASE_DIR . "/datasets/test-delete-album.xml")->getTable("album");
+
+        /*Проверка эквивалентности*/
+        $this->assertTablesEqual(
+            $expected_table,
+            $query_table,
+            "Asseerting that the tables are equal"
+        );
+    }
 }
