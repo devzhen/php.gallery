@@ -6,6 +6,10 @@ class Router
 {
     private $routes = null;
 
+    /**
+     * Router constructor.
+     * @param array $routes
+     */
     public function __construct($routes)
     {
         $this->routes = $routes;
