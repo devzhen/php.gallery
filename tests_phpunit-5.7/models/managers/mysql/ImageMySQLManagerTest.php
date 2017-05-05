@@ -288,4 +288,9 @@ class ImageMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
 
         $this->assertTablesEqual($expected_image_table, $actual_image_table);
     }
+
+    public function testSomething()
+    {
+        $this->assertTrue(true);
+    }
 }

@@ -211,8 +211,8 @@
             <value>31</value>
             <value>TEST_IMAGE</value>
             <value>1</value>
-            <value>NULL</value>
-            <value>NULL</value>
+            <value>#NULL#</value>
+            <value>#NULL#</value>
             <value>-1</value>
         </row>
     </table>
