@@ -7,9 +7,9 @@
         <column>dir</column>
         <column>order_param</column>
         <row>
-            <value>TEST</value>
+            <value>TEMP</value>
             <value>2000-01-01 00:00:00</value>
-            <value>TEST DESCRIPTION</value>
+            <value>TEMP DESCRIPTION</value>
             <value></value>
             <value>-1</value>
         </row>

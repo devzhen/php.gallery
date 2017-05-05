@@ -277,7 +277,7 @@ class ImageMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
         $image = $image_manager->save($image);
 
         /*Обновление изображения*/
-        $image_manager->update($image, "TEST", "TEST", "TEST");
+        $image_manager->update($image, "TEMP", "TEMP", "TEMP");
 
         /*Обновленное изоб-ие в БД*/
         $actual_image_table = $this->getConnection()->createQueryTable('image',
@@ -289,8 +289,12 @@ class ImageMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
         $this->assertTablesEqual($expected_image_table, $actual_image_table);
     }
 
+
+    /**
+     * Для очистки БД
+     */
     public function testSomething()
     {
-        $this->assertTrue(true);
+        // Для очистки БД
     }
 }

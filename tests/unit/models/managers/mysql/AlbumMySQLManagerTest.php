@@ -25,7 +25,7 @@ class AlbumMySQLManagerTest extends Unit
     /*Метод вызывается перед выполнением тестового класса(всех тестов)*/
     public static function setUpBeforeClass()
     {
-        self::$db_config = require_once(TEST_DIR . "/unit/config/db.php");
+        self::$db_config = include(TEST_DIR . "/unit/config/db.php");
 
         self::$album_manager = new \app\models\managers\mysql\AlbumMySQLManager(self::$db_config);
     }
@@ -142,7 +142,7 @@ class AlbumMySQLManagerTest extends Unit
         $founded_albums = self::$album_manager->findAll();
 
         /**
-         * Полученеи подключения к БД
+         * Получение подключения к БД
          * @var \PDO $pdo
          */
         $pdo = $this->getModule('Db')->dbh;
@@ -152,7 +152,103 @@ class AlbumMySQLManagerTest extends Unit
         /*Ассоциативный массив альбомов из БД*/
         $arr = $res->fetchAll(\PDO::FETCH_ASSOC);
 
+        $res = null;
+        $pdo = null;
+
         /*Проверка утверждения, что массивы идентичны*/
         $this->assertEquals($founded_albums, $arr);
+    }
+
+
+    /**
+     * Тест поиска одного альбома
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::findOne()
+     */
+    public function testFindOneAlbum()
+    {
+        /*Создание альбома*/
+        $created_album = new \app\models\entities\Album(
+            null,
+            "Test",
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+        $created_album = self::$album_manager->save($created_album);
+
+        /*Проверка, что альбом в БД*/
+        $this->tester->seeInDatabase('album', ['id' => $created_album->id]);
+
+        /*Поиск альбома*/
+        $founded_album = self::$album_manager->findOne($created_album->id);
+
+        /*Проверка эквивалентности альбомов*/
+        $this->assertEquals($created_album,
+            $founded_album,
+            "Assertion that albums are equal");
+    }
+
+
+    /**
+     * Тест поиска альбома по имени
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::findByName()
+     */
+    public function testFindAlbumByName()
+    {
+        $unique_name = md5(md5(uniqid("", true)));
+
+        /*Создание альбома*/
+        $created_album = new \app\models\entities\Album(
+            null,
+            $unique_name,
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+
+        self::$album_manager->save($created_album);
+
+        /*Поиск по имени в БД вновь созданного альбома*/
+        $this->tester->seeInDatabase('album', ['name' => $unique_name]);
+
+    }
+
+
+    /**
+     * Тест количества альбомов
+     * @covers \app\models\managers\mysql\AlbumMySQLManager::count()
+     */
+    public function testCount()
+    {
+        /*Совпадает ли кол-во записей в БД*/
+        $this->assertEquals(
+            self::$album_manager->count(),
+            $this->tester->grabNumRecords('album')
+        );
+
+        /*Создание альбома*/
+        $album = new \app\models\entities\Album(
+            null,
+            "Test",
+            "2000-01-01 00:00:00",
+            "Test description",
+            ""
+        );
+        $album = self::$album_manager->save($album);
+
+        /*Совпадает ли кол-во записей в БД*/
+        $this->assertEquals(
+            self::$album_manager->count(),
+            $this->tester->grabNumRecords('album')
+        );
+
+        /*Удаление альбома*/
+        self::$album_manager->delete($album->id);
+
+        /*Совпадает ли кол-во записей в БД*/
+        $this->assertEquals(
+            self::$album_manager->count(),
+            $this->tester->grabNumRecords('album')
+        );
     }
 }

@@ -173,9 +173,9 @@ class AlbumMySQLManagerTest extends \PHPUnit_Extensions_Database_TestCase
         /*Обновление альбома*/
         $album_manager->update(
             $album,
-            "TEST",
+            "TEMP",
             "2000-01-01 00:00:00",
-            "TEST DESCRIPTION",
+            "TEMP DESCRIPTION",
             "",
             -1
         );

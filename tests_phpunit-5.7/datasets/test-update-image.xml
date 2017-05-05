@@ -7,10 +7,10 @@
         <column>dir</column>
         <column>order_param</column>
         <row>
-            <value>TEST</value>
+            <value>TEMP</value>
             <value>1</value>
-            <value>TEST</value>
-            <value>TEST</value>
+            <value>TEMP</value>
+            <value>TEMP</value>
             <value>-1</value>
         </row>
     </table>
