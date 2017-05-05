@@ -6,4 +6,12 @@ class_name: UnitTester
 modules:
     enabled:
         - Asserts
+        - Db:
+            dsn: 'mysql:host=127.0.0.1;dbname=gallery'
+            user: 'root'
+            password: ''
+            dump: 'tests/_data/dump.sql'
+            populate: true
+            cleanup: false
+            reconnect: true
         - \Helper\Unit
