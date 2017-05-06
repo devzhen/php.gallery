@@ -17,28 +17,23 @@ class AlbumController extends Controller
         /*HTML код pagination кнопок*/
         $paginationButtons = null;
 
-        /*Max кол-во pagination - кнопок на странице*/
-        $countPaginationButton = 5;
-
-        /*Кол-во альбомов на странице*/
-        $albumLimit = 12;
-
-        /*Параметр OFFSET , кот.будет исп-ся в sql-запросе SELECT ... LIMIT ...OFFSET*/
-        $albumOffset = 0;
+        /*Массив, который будет содержать значения LIMIT и OFFSET для SQL запроса*/
+        $arguments = array();
 
         /*Если клиент не администратор - необходима постраничная навигация*/
         if ($client == 'user') {
 
+            /*Max кол-во pagination - кнопок на странице*/
+            $countPaginationButton = 5;
+
+            /*Кол-во альбомов на странице*/
+            $albumLimit = 12;
+
+            /*Параметр OFFSET , кот.будет исп-ся в sql-запросе SELECT ... LIMIT ...OFFSET*/
+            $albumOffset = 0;
 
             /*Количество альбомов*/
-            try {
-
-                $albumCount = $this->album_manager->count();
-
-            } catch (\mysqli_sql_exception $e) {
-                $this->action500();
-                return;
-            }
+            $albumCount = $this->album_manager->count();
 
             /*Создать пагинацию только если альбомы созданы*/
             if ($albumCount > 0) {
@@ -63,17 +58,8 @@ class AlbumController extends Controller
             }
 
 
-            /*Получение списка альбомов*/
-            try {
-
-                $albums = $this->album_manager->findAll($albumLimit, $albumOffset);
-
-            } catch (\mysqli_sql_exception $e) {
-
-                $this->action500();
-                return;
-            }
-
+            $arguments[] = $albumLimit;
+            $arguments[] = $albumOffset;
 
         } elseif ($client == 'admin') {
 
@@ -87,30 +73,33 @@ class AlbumController extends Controller
                 unset($_SESSION['fileToUpload']['message']);
             }
 
-            /*Получение списка альбомов*/
-            try {
-                $albums = $this->album_manager->findAll();
-            } catch (\mysqli_sql_exception $e) {
-                $this->action500($e->getMessage());
-                return;
-            }
-
         }
 
-        // Добавление в каждый альбом первой фотографии
-        foreach ($albums as &$album) {
 
-            // Установка hash token
-            $album = $album + array('token' => md5(uniqid(rand(), true)));
+        try {
 
-            // Установка первого изображения в альбоме
-            $firstImage = $this->image_manager->findAllByAlbum(\intval($album['id']), 1);
+            /*Получение всех альбомов*/
+            $albums = call_user_func_array(array($this->album_manager, 'findAll'), $arguments);
 
-            if (empty($firstImage)) {
-                $album = $album + array('firstImage' => BASE_URL . "/app/web/images/no-image.jpg");
-            } else {
-                $album = $album + array('firstImage' => $firstImage[0]['src']);
+            // Добавление в каждый альбом первой фотографии
+            foreach ($albums as &$album) {
+
+                // Установка hash token
+                $album = $album + array('token' => md5(uniqid(rand(), true)));
+
+                // Установка первого изображения в альбоме
+                $firstImage = $this->image_manager->findAllByAlbum(\intval($album['id']), 1);
+
+                if (empty($firstImage)) {
+                    $album = $album + array('firstImage' => BASE_URL . "/app/web/images/no-image.jpg");
+                } else {
+                    $album = $album + array('firstImage' => $firstImage[0]['src']);
+                }
             }
+
+        } catch (\mysqli_sql_exception $e) {
+            $this->action500($e->getMessage());
+            return;
         }
 
 
@@ -185,14 +174,7 @@ class AlbumController extends Controller
         } else {
 
             // Нужна ли аутентификация
-            if (!\app\components\AuthenticationManager::isAuthenticated('admin')) {
-
-                // Запись в сессию url, с кот. произошло перенаправление
-                $_SESSION['relatedUrl'] = BASE_URL . $_SERVER['REQUEST_URI'];
-                // Переадресация на страницу аутентификации
-                header("Location: " . BASE_URL . "/login");
-                return;
-            }
+            \app\components\AuthenticationManager::checkClientAuthentication('admin');
 
             $this->view->render('new');
         }
