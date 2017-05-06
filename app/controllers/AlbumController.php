@@ -43,7 +43,7 @@ class AlbumController extends Controller
                 $p = new \app\components\PaginationManager($albumCount, $albumLimit, $countPaginationButton);
 
                 /*Получение параметра OFFSET для sql-запроса SELECT*/
-                $albumOffset = $p->getOffset($page);
+                $albumOffset = $p->getSQLOffset($page);
 
                 /*Если параметр $page - некорректный*/
                 if (is_null($albumOffset)) {

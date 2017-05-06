@@ -53,7 +53,7 @@ class PaginationManager
      * @param integer $page_number Номер страницы
      * @return null | integer
      */
-    public function getOffset($page_number)
+    public function getSQLOffset($page_number)
     {
         if ($page_number > \count($this->arrayPages) || $page_number < 1) {
             return null;
@@ -61,7 +61,6 @@ class PaginationManager
 
         return $this->arrayPages[$page_number];
     }
-
 
     /**
      * Метод возвращает html-строку кнопок постраничной навигации
