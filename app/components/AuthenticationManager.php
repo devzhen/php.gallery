@@ -2,9 +2,28 @@
 
 namespace app\components;
 
-
+/**
+ * Class AuthenticationManager
+ * @package app\components
+ */
 class AuthenticationManager
 {
+
+    /**
+     * Метод проверяет нужна ли аутентификация и если да - отправляет на страницу /login
+     */
+    public static function checkClientAuthentication($client)
+    {
+        if (!self::isAuthenticated($client)) {
+
+            // Запись в сессию текущего url
+            $_SESSION['relatedUrl'] = BASE_URL . $_SERVER['REQUEST_URI'];
+            // Переадресация на страницу аутентификации
+            header("Location: " . BASE_URL . "/login");
+            return;
+
+        }
+    }
 
     public static function isAuthenticated($client)
     {

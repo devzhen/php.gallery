@@ -25,7 +25,7 @@ class PaginationManager
 
 
     /**
-     * Pagination constructor.
+     * PaginationManager constructor.
      * @param integer $countOfElements - Общее кол-во элементов
      * @param integer $limit - Кол-во элементов на одну страницу
      * @param integer $maxCountOfPaginationButtons - Кол-во кнопок постраничной навигации

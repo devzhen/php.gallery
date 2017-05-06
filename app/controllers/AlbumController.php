@@ -32,7 +32,9 @@ class AlbumController extends Controller
 
             /*Количество альбомов*/
             try {
+
                 $albumCount = $this->album_manager->count();
+
             } catch (\mysqli_sql_exception $e) {
                 $this->action500();
                 return;
@@ -75,15 +77,8 @@ class AlbumController extends Controller
 
         } elseif ($client == 'admin') {
 
-            // Нужна ли аутентификация
-            if (!\app\components\AuthenticationManager::isAuthenticated($client)) {
-
-                // Запись в сессию url, с кот. произошло перенаправление
-                $_SESSION['relatedUrl'] = BASE_URL . $_SERVER['REQUEST_URI'];
-                // Переадресация на страницу аутентификации
-                header("Location: " . BASE_URL . "/login");
-                return;
-            }
+            // Проверка - нужна ли аутентификация
+            \app\components\AuthenticationManager::checkClientAuthentication($client);
 
             if (isset($_SESSION['last_created'])) {
                 unset($_SESSION['last_created']);
@@ -101,7 +96,6 @@ class AlbumController extends Controller
             }
 
         }
-
 
         // Добавление в каждый альбом первой фотографии
         foreach ($albums as &$album) {
