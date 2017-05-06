@@ -8,8 +8,8 @@ class AlbumController extends Controller
 
     /**
      * This action displays a list of all albums
-     * @param string $client
-     * @param string $page
+     * @param string $client - Админ или пользователь проссматривает страницу?
+     * @param integer $page - Номер страницы если есть постраничная навигация
      */
     public function actionAll($client = 'user', $page = 1)
     {
